@@ -1,30 +1,33 @@
-import pandas as pd
+
+from sklearn.datasets import load_breast_cancer
 import numpy as np
 
+# Load dataset
+data = load_breast_cancer()
 
+# Construct feature matrix X and target vector y
+X = data.data
+y = data.target
 
-df = pd.read_csv('crime1 (1).csv')
+# Report the shape of X and y
+print("Shape of X:", X.shape)
+print("Shape of y:", y.shape)
 
-column = df["ViolentCrimesPerPop"]
+# Report the number of samples belonging to each class
+unique, counts = np.unique(y, return_counts=True)
+for label, count in zip(unique, counts):
+    print(f"Class {label} ({data.target_names[label]}): {count} samples")
 
-mean_value = column.mean()
-median_value = column.median()
-std_value = column.std()
-min_value = column.min()
-max_value = column.max()
-
-print("Mean Value: ", mean_value)
-print("Median Value: ", median_value)
-print("Std Value: ", std_value)
-print("Min Value: ", min_value)
-print("Max Value: ", max_value)
-
-
-
-#The mean value is larger than the median value and we can
-#assume that the graph is right skewed
-
-#outliers effect the mean more than the median as the mean uses an average of every number which the outlier would skew
-#while the median goes through the middle value which even with an addition of outliers should not change it to much since its so
-#outweighed by the rest.
-
+# Discussion:
+# The dataset is slightly imbalanced — there are more benign (class 1) samples
+# than malignant (class 0) samples. However, the imbalance is not extreme.
+#
+# Class balance is an important consideration for classification models because:
+# - If one class dominates, the model may become biased toward predicting the
+#   majority class, leading to high overall accuracy but poor recall for the
+#   minority class.
+# - In a medical context like cancer diagnosis, failing to detect malignant
+#   cases (false negatives) can have serious consequences, so it is critical
+#   that the model performs well on both classes.
+# - Techniques like stratified splitting, class weighting, or resampling can
+#   help address imbalance issues.
